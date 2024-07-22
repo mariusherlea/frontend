@@ -7,6 +7,17 @@ import { FaStar, FaStarHalf } from "react-icons/fa";
 import { Tabs, TabsList, TabsTrigger } from "./ui/tabs";
 
 const RoomList = ({ rooms }: { rooms: any }) => {
+  const [roomType, setRoomType] = useState("all");
+  const [filteredRooms, setFilteredRooms] = useState([]);
+
+  useEffect(() => {
+    const filtered = rooms.data.filter((room: any) => {
+      return roomType === "all" ? rooms : roomType === room.attributes.type;
+    });
+    setFilteredRooms(filtered);
+  }, [roomType, rooms]);
+
+  console.log(filteredRooms);
   return (
     <section className="py-16 min-h-[90vh]">
       {/**image & title */}
@@ -23,11 +34,45 @@ const RoomList = ({ rooms }: { rooms: any }) => {
         <h2 className="h2 mb-8">Our room</h2>
       </div>
       {/**tabs */}
-      <div>tabs</div>
+      <Tabs
+        defaultValue="all"
+        className="w-[240px] lg:w-[540px] h-[200px] lg:h-auto mb-8 mx-auto"
+      >
+        <TabsList className="w-full h-full lg:h-[46px] flex flex-col lg:flex-row">
+          <TabsTrigger
+            className="w-full h-full"
+            value="all"
+            onClick={() => setRoomType("all")}
+          >
+            All
+          </TabsTrigger>
+          <TabsTrigger
+            className="w-full h-full"
+            value="single"
+            onClick={() => setRoomType("single")}
+          >
+            Single
+          </TabsTrigger>
+          <TabsTrigger
+            className="w-full h-full"
+            value="double"
+            onClick={() => setRoomType("double")}
+          >
+            Double
+          </TabsTrigger>
+          <TabsTrigger
+            className="w-full h-full"
+            value="extended"
+            onClick={() => setRoomType("extended")}
+          >
+            Extended
+          </TabsTrigger>
+        </TabsList>
+      </Tabs>
       {/**room list */}
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-        {rooms.data.map((room: any) => {
+        {filteredRooms.map((room: any) => {
           const imgURL = `http://127.0.0.1:1337${room.attributes.image.data?.attributes.url}`;
 
           return (

@@ -1,3 +1,4 @@
+"use client";
 import RoomList from "./RoomList";
 
 const getRooms = async () => {
