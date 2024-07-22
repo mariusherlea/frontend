@@ -19,7 +19,7 @@ const config = {
     },
     fontFamily: {
       primary: "var(--font-marcellus)",
-      secondary: "var(--font-urbanist)",
+      secondary: "var(--font-poppins)",
     },
     extend: {
       colors: {

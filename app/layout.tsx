@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Marcellus, Urbanist } from "next/font/google";
+import { Marcellus, Poppins } from "next/font/google";
 import "./globals.css";
 
 const marcellus = Marcellus({
@@ -7,10 +7,10 @@ const marcellus = Marcellus({
   weight: ["400"],
   variable: "--font-marcellus",
 });
-const urbanist = Urbanist({
+const poppins = Poppins({
   subsets: ["latin"],
   weight: ["100", "200", "300", "400", "500", "600", "700", "800", "900"],
-  variable: "--font-urbanist",
+  variable: "--font-poppins",
 });
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -24,7 +24,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${marcellus.variable} ${urbanist.variable}`}>
+      <body className={`${marcellus.variable} ${poppins.variable}`}>
         {children}
       </body>
     </html>
