@@ -1,15 +1,22 @@
 "use client";
+
+import { useState, useEffect } from "react";
 import RoomList from "./RoomList";
 
-const getRooms = async () => {
-  const res = await fetch("http://127.0.0.1:1337/api/rooms?populate=*", {
-    next: { revalidate: 0 },
-  });
-  return await res.json();
-};
+const Rooms = () => {
+  const [rooms, setRooms] = useState([]);
 
-const Rooms = async () => {
-  const rooms = await getRooms();
+  useEffect(() => {
+    const getRooms = async () => {
+      const res = await fetch("http://127.0.0.1:1337/api/rooms?populate=*", {
+        next: { revalidate: 0 },
+      });
+      const data = await res.json();
+      setRooms(data);
+    };
+
+    getRooms();
+  }, []);
 
   return (
     <section>

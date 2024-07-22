@@ -6,18 +6,43 @@ import { FaStar, FaStarHalf } from "react-icons/fa";
 
 import { Tabs, TabsList, TabsTrigger } from "./ui/tabs";
 
-const RoomList = ({ rooms }: { rooms: any }) => {
-  const [roomType, setRoomType] = useState("all");
-  const [filteredRooms, setFilteredRooms] = useState([]);
+interface Room {
+  id: number;
+  attributes: {
+    name: string;
+    type: string;
+    price: number;
+    discount: number;
+    image: {
+      data: {
+        attributes: {
+          url: string;
+        };
+      };
+    };
+  };
+}
+
+interface RoomListProps {
+  rooms: { data: Room[] };
+}
+
+const RoomList: React.FC<RoomListProps> = ({ rooms }) => {
+  const [roomType, setRoomType] = useState<
+    "all" | "single" | "double" | "extended"
+  >("all");
+  const [filteredRooms, setFilteredRooms] = useState<Room[]>([]);
 
   useEffect(() => {
-    const filtered = rooms.data.filter((room: any) => {
-      return roomType === "all" ? rooms : roomType === room.attributes.type;
-    });
-    setFilteredRooms(filtered);
+    if (rooms && rooms.data) {
+      const filtered = rooms.data.filter((room) => {
+        return roomType === "all" ? true : roomType === room.attributes.type;
+      });
+      setFilteredRooms(filtered);
+    } else {
+      setFilteredRooms([]);
+    }
   }, [roomType, rooms]);
-
-  console.log(filteredRooms);
   return (
     <section className="py-16 min-h-[90vh]">
       {/**image & title */}
