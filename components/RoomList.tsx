@@ -128,20 +128,10 @@ const RoomList: React.FC<RoomListProps> = ({ rooms }) => {
                   <h3 className="h3">{room.attributes.title}</h3>
                 </Link>
 
-                <p
-                  className={`h4 font-secondary font-medium  ${
-                    room.attributes.discount ? "line-through" : "text-accent"
-                  }`}
-                >
-                  {room.attributes.price}
-
-                  <span className="text-base text-secondary"> $ /night</span>
+                <p className={`h3 font-secondary font-medium text-accent`}>
+                  $ {room.attributes.price}
+                  <span className="text-base text-secondary">/ night</span>
                 </p>
-                {room.attributes.discount && (
-                  <p className="h4 text-accent">
-                    {room.attributes.discount} $ /night
-                  </p>
-                )}
               </div>
             </div>
           );
