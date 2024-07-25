@@ -1,3 +1,4 @@
+import Reservation from "@/components/Reservation";
 import Image from "next/image";
 import { TbArrowsMaximize, TbUser } from "react-icons/tb";
 
@@ -56,7 +57,7 @@ const RoomDetails = async ({ params }: { params: any }) => {
           </div>
           {/** reservation */}
           <div className="w-full lg:max-w-[360px] h-max bg-green-300">
-            reservation
+            <Reservation />
           </div>
         </div>
       </div>
