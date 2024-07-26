@@ -14,7 +14,7 @@ import { LogoutLink } from "@kinde-oss/kinde-auth-nextjs/components";
 import { FaCalendarCheck, FaHome, FaSignOutAlt } from "react-icons/fa";
 
 const Dropdown = ({ user }: { user: any }) => {
-  console.log(user);
+  // console.log(user);
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>

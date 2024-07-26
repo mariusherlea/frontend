@@ -44,7 +44,7 @@ const Header = async () => {
           {/**logo & socials icons*/}
           <div className="flex items-center gap-5 justify-center xl:w-max">
             {/**logo */}
-            <Link href="google.com">
+            <Link href="/">
               <Image
                 src="/assets/logo.svg"
                 alt="logo"
