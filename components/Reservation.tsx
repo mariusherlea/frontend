@@ -12,6 +12,37 @@ import {
 } from "@/components/ui/popover";
 import { cn } from "@/lib/utils";
 import { LoginLink } from "@kinde-oss/kinde-auth-nextjs/components";
+
+const postData = async (url: string, data: object) => {
+  const options = {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(data),
+  };
+  try {
+    const res = await fetch(url, options);
+
+    if (!res.ok) {
+      const errorText = await res.text();
+      throw new Error(
+        `HTTP error! Status: ${res.status}, Message: ${errorText}`
+      );
+    }
+
+    const responseData = await res.json();
+    return responseData;
+  } catch (error) {
+    if (error instanceof Error) {
+      console.error("Error during fetch:", error.message);
+    } else {
+      console.error("Unknown error during fetch");
+    }
+    // Handle specific status codes or errors here if needed
+  }
+};
+
 const Reservation = ({
   reservations,
   room,
@@ -26,9 +57,30 @@ const Reservation = ({
   const [checkInDate, setcheckInDate] = useState<Date>();
   const [checkOutDate, setcheckOutDate] = useState<Date>();
 
-  const saveReservation = () => {
-    if (!checkInDate || !checkOutDate) {
-      console.log("please select check in and check out dates");
+  const formatDateForStrapi = (date: Date) => {
+    return format(date, "yyyy-MM-dd");
+  };
+
+  const saveReservation = async () => {
+    //dummy data
+    const data = {
+      data: {
+        firstname: "Marius",
+        lastname: "Tome",
+        email: "mariusto@sadf.re",
+        checkIn: "2024-09-20",
+        checkOut: "2024-09-25",
+        room: 1,
+      },
+    };
+    try {
+      const response = await postData(
+        "http://127.0.0.1:1337/api/reservations",
+        data
+      );
+      console.log("Reservation saved:", response);
+    } catch (error) {
+      console.error("Error saving reservation:", error);
     }
   };
 
@@ -37,39 +89,45 @@ const Reservation = ({
       <div className="bg-tertiary h-[320px] mb-4">
         {/**top */}
         <div className="bg-accent py-4 text-center relativa mb-2">
-          <h4 className="text-xl text-white">Book your room</h4>
+          <h4 className="text-xl text-white">
+            Book at least one night please. Thank you.
+          </h4>
         </div>
         <div className="flex flex-col gap-4 w-full py-6 px-8">
           {/** check in date picker  */}
+          {isUserAuthenticated ? (
+            <Popover>
+              <PopoverTrigger asChild>
+                <Button
+                  variant="default"
+                  size="md"
+                  className={cn(
+                    "w-full flex justify-start text-left font-semibold",
+                    !checkInDate && "text-secondary"
+                  )}
+                >
+                  <CalendarIcon className="mr-2 h-4 w-4" />
+                  {checkInDate ? (
+                    format(checkInDate, "PPP")
+                  ) : (
+                    <span>Check in</span>
+                  )}
+                </Button>
+              </PopoverTrigger>
+              <PopoverContent className="w-auto p-0">
+                <Calendar
+                  mode="single"
+                  selected={checkInDate}
+                  onSelect={setcheckInDate}
+                  initialFocus
+                  disabled={isPast}
+                />
+              </PopoverContent>
+            </Popover>
+          ) : (
+            ""
+          )}
 
-          <Popover>
-            <PopoverTrigger asChild>
-              <Button
-                variant="default"
-                size="md"
-                className={cn(
-                  "w-full flex justify-start text-left font-semibold",
-                  !checkInDate && "text-secondary"
-                )}
-              >
-                <CalendarIcon className="mr-2 h-4 w-4" />
-                {checkInDate ? (
-                  format(checkInDate, "PPP")
-                ) : (
-                  <span>Check in</span>
-                )}
-              </Button>
-            </PopoverTrigger>
-            <PopoverContent className="w-auto p-0">
-              <Calendar
-                mode="single"
-                selected={checkInDate}
-                onSelect={setcheckInDate}
-                initialFocus
-                disabled={isPast}
-              />
-            </PopoverContent>
-          </Popover>
           {/** check out date picker  */}
           {checkInDate ? (
             <Popover>
@@ -122,13 +180,14 @@ const Reservation = ({
               size="md"
               className="w"
               onClick={saveReservation}
+              disabled={!checkInDate || !checkOutDate}
             >
               Book now
             </Button>
           ) : (
             <LoginLink>
               <Button variant="primary" size="md" className="w">
-                Login and Book now
+                Login first please
               </Button>
             </LoginLink>
           )}
