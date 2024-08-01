@@ -65,12 +65,12 @@ const Reservation = ({
     //dummy data
     const data = {
       data: {
-        firstname: "Marius",
-        lastname: "Tome",
-        email: "mariusto@sadf.re",
-        checkIn: "2024-09-20",
-        checkOut: "2024-09-25",
-        room: 1,
+        firstname: userData.family_name,
+        lastname: userData.given_name,
+        email: userData.email,
+        checkIn: checkInDate ? formatDateForStrapi(checkInDate) : null,
+        checkOut: checkOutDate ? formatDateForStrapi(checkOutDate) : null,
+        room: room.data.id,
       },
     };
     try {
